@@ -1,0 +1,4 @@
+*.pyc
+data.sqlite
+/_cache/
+/env/
