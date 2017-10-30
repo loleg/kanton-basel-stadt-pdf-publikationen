@@ -21,14 +21,14 @@ c.execute(
 conn.commit()
 
 # Download from cache
-f = open('_cache/bs.ch-publikationen.EXCERPT.html', 'r')
-cache_data = f.read()
-soup = BeautifulSoup(cache_data, 'html.parser')
-f.close()
+# f = open('_cache/bs.ch-publikationen.EXCERPT.html', 'r')
+# cache_data = f.read()
+# soup = BeautifulSoup(cache_data, 'html.parser')
+# f.close()
 
 # Retrieve from server
-# page = requests.get(url)
-# soup = BeautifulSoup(page.content, 'html.parser')
+page = requests.get(url)
+soup = BeautifulSoup(page.content, 'html.parser')
 
 pub_entries = soup.select('tbody tr')
 
