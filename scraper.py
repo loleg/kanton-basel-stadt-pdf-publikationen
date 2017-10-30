@@ -6,6 +6,8 @@ import sqlite3
 DATABASE_NAME = 'data.sqlite'
 START_URL = 'http://www.bs.ch/publikationen/content/0.html?limit=2000&offset=0&searchString=&from=egal&to=2017&organisationUnit=all&orderBy=year&orderType=DESC'
 
+url = START_URL
+
 fields = [
     'title',
     'subtitle',
