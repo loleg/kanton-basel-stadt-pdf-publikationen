@@ -3,7 +3,8 @@ from bs4 import BeautifulSoup
 import dateparser
 import sqlite3
 
-USE_CACHE = True
+USE_CACHE = False
+SAVE_CACHE = True
 SHOW_PREVIEW = False
 DATABASE_NAME = 'data.sqlite'
 PER_PAGE = 1000
@@ -70,7 +71,7 @@ def run():
 
     # Download from cache
     if USE_CACHE:
-        for page_count in range(0, 2):
+        for page_count in range(0, MAX_PAGES):
             print ("Collecting page %d" % page_count)
             f = open('_cache/%d.html' % page_count, 'r')
             cache_data = f.read()
@@ -83,12 +84,17 @@ def run():
     # Retrieve from server
     else:
         page_count = 0
-        while page_count < MAX_PAGES:
+        while page_count <= MAX_PAGES:
             print ("Collecting page %d" % page_count)
             url = SEARCH_URL % (SERVER_ROOT, PER_PAGE, page_count * PER_PAGE)
             page = requests.get(url)
             if 'Keine Publikationen gefunden' in page.text:
                 break
+            if SAVE_CACHE:
+                fw = open('_cache/%d.html' % page_count, 'w')
+                fw.write(page.text)
+                print ("Cached page %d" % page_count)
+                fw.close()
             soup = BeautifulSoup(page.content, 'html.parser')
             rows = soup.select('tbody tr')
             save(c, rows)
