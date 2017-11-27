@@ -4,7 +4,7 @@ import dateparser
 import sqlite3
 
 USE_CACHE = False
-SAVE_CACHE = True
+SAVE_CACHE = False
 SHOW_PREVIEW = False
 DATABASE_NAME = 'data.sqlite'
 PER_PAGE = 1000
