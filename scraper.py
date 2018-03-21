@@ -42,7 +42,7 @@ def save(c, pub_entries):
         a_title_anchor = a_title.find('dt').find('a')
 
         entrydata['title'] = a_title_anchor.get_text()
-        entrydata['link'] = SERVER_ROOT + a_title_anchor.get('src')
+        entrydata['link'] = SERVER_ROOT + a_title_anchor.get('href')
         for dd in a_title.find_all('dd'):
             if not dd.get('class'):
                 entrydata['subtitle'] = dd.get_text()
