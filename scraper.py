@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import dateparser
 import sqlite3
+from sys import argv
 
 USE_CACHE = False
 SAVE_CACHE = False
@@ -10,6 +11,13 @@ DATABASE_NAME = 'data.sqlite'
 PER_PAGE = 1000
 MAX_PAGES = 10
 
+# Debug settings
+if 'debug' in argv:
+    USE_CACHE = True
+    SAVE_CACHE = True
+    SHOW_PREVIEW = True
+    MAX_PAGES = 1
+
 SERVER_ROOT = 'http://www.bs.ch'
 SEARCH_URL = '%s/publikationen/content/0.html?limit=%d&offset=%d&searchString=&from=egal&to=egal&organisationUnit=all&orderBy=year&orderType=DESC'
 
@@ -17,6 +25,7 @@ fields = [
     'title',
     'subtitle',
     'image',
+    'link'
 ]
 
 
@@ -26,11 +35,14 @@ def save(c, pub_entries):
         entrydata = {
             'title': None,
             'subtitle': None,
-            'image': None
+            'image': None,
+            'link': None
         }
         a_title = entry.find('td', { 'headers':'title' })
+        a_title_anchor = a_title.find('dt').find('a')
 
-        entrydata['title'] = a_title.find('dt').find('a').get_text()
+        entrydata['title'] = a_title_anchor.get_text()
+        entrydata['link'] = SERVER_ROOT + a_title_anchor.get('src')
         for dd in a_title.find_all('dd'):
             if not dd.get('class'):
                 entrydata['subtitle'] = dd.get_text()
@@ -54,6 +66,7 @@ def save(c, pub_entries):
                 entrydata['title'],
                 entrydata['subtitle'],
                 entrydata['image'],
+                entrydata['link'],
             ]
         )
 
